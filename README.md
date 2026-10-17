@@ -26,9 +26,15 @@ Detection engineering and alert triage come in v2.
 
 Secwright is a **defensive** tool. It is built to secure code and infrastructure that you own or are authorised to work on. It doesn't target third-party systems, and its training rewards fixing, not exploiting. See [SECURITY.md](SECURITY.md).
 
+## Docs
+
+- [Plan](docs/PLAN.md): goals, scope, model, roadmap
+- [Architecture](docs/ARCHITECTURE.md): components and interfaces
+- [Task format](docs/TASK_FORMAT.md): what a task is and how it's validated
+
 ## Roadmap
 
-See [docs/PLAN.md](docs/PLAN.md). In short:
+In short:
 
 1. **Phase 0:** design (now)
 2. **Phase 1:** the agent working with existing open models, plus the first environments and baselines
