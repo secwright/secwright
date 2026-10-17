@@ -50,13 +50,14 @@ One sandbox = one isolated environment for one episode.
 
 ```python
 class Sandbox(Protocol):
-    def start(self, task: Task) -> None: ...
+    def start(self) -> None: ...  # the sandbox is created for one task's image
     def exec(self, cmd: str, timeout_s: int, cwd: str | None = None) -> ExecResult: ...
     def read_file(self, path: str) -> bytes: ...
     def write_file(self, path: str, data: bytes) -> None: ...
-    def copy_in(self, src: Path, dest: str, read_only: bool = True) -> None: ...
-    def diff(self) -> str: ...            # unified diff of workdir vs. the start snapshot
+    def copy_in(self, src: Path, dest: str) -> None: ...  # root-owned: read-only for the agent
+    def diff(self) -> str: ...  # unified diff of workdir vs. the start snapshot
     def close(self) -> None: ...
+
 
 @dataclass
 class ExecResult:
@@ -89,12 +90,13 @@ Each tool has a name, a JSON-schema for its arguments, and a handler that runs a
 class Tool:
     name: str
     description: str
-    parameters: dict          # JSON schema
+    parameters: dict  # JSON schema
     handler: Callable[[Sandbox, dict], ToolResult]
+
 
 @dataclass
 class ToolResult:
-    content: str              # what the model sees (truncated)
+    content: str  # what the model sees (truncated)
     is_error: bool = False
     ends_episode: bool = False
 ```
@@ -128,8 +130,10 @@ Security tools run in the same sandbox and are pre-installed in task images. The
 class ModelClient(Protocol):
     def chat(self, messages: list[Message], tools: list[Tool]) -> ModelResponse: ...
 
-def run_episode(task: Task, model: ModelClient, sandbox: Sandbox,
-                brief_level: str = "detailed", seed: int | None = None) -> Trajectory: ...
+
+def run_episode(
+    task: Task, model: ModelClient, sandbox: Sandbox, brief_level: str = "detailed", seed: int | None = None
+) -> Trajectory: ...
 ```
 
 Loop:
@@ -159,13 +163,14 @@ class CheckResult:
     passed: bool
     exit_code: int
     duration_s: float
-    output_tail: str          # last 4 KB, for debugging
+    output_tail: str  # last 4 KB, for debugging
+
 
 @dataclass
 class GradeResult:
-    reward: float             # 1.0 if every check passed, else 0.0
+    reward: float  # 1.0 if every check passed, else 0.0
     checks: list[CheckResult]
-    flags: list[str]          # e.g. "modified_test_files", "empty_diff", "infra_error"
+    flags: list[str]  # e.g. "modified_test_files", "empty_diff", "infra_error"
 ```
 
 Steps after `submit` (or budget exhaustion):

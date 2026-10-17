@@ -2,7 +2,7 @@
 
 **An open-weight AI model trained to do hands-on security engineering.** It works inside your codebase and infrastructure to find, fix and harden security issues, and it's fast enough to run on your own hardware.
 
-> **Status: Phase 0 (design).** There's no code or model yet. This repo holds the plan; follow along or open a discussion.
+> **Status: Phase 1 (building).** The task format, Docker sandbox and validator work, and the first real-CVE task is in. The agent harness is next. There is no trained model yet.
 
 ## What it will be
 
@@ -31,6 +31,17 @@ Secwright is a **defensive** tool. It is built to secure code and infrastructure
 - [Plan](docs/PLAN.md): goals, scope, model, roadmap
 - [Architecture](docs/ARCHITECTURE.md): components and interfaces
 - [Task format](docs/TASK_FORMAT.md): what a task is and how it's validated
+
+## Try it (contributors)
+
+Needs Docker and [uv](https://docs.astral.sh/uv/).
+
+```bash
+uv sync
+uv run secwright list                                   # show tasks
+uv run secwright validate py-jinja2-cve-2024-22195      # build it and check rules V1–V9
+uv run secwright validate --all --runs 3 --rebuild      # the full, slow check
+```
 
 ## Roadmap
 
