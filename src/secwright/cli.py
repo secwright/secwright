@@ -100,8 +100,10 @@ def _cmd_run(args: argparse.Namespace) -> int:
     print(f"files changed: {', '.join(changed) or 'none'}")
     for c in traj.checks:
         print(f"  {'✅' if c['passed'] else '❌'} {c['name']} ({c['kind']}, {c['duration_s']}s)")
-    print(f"trajectory → {out}  (reward comes from the grader, PR 4)")
-    return 0 if traj.checks and all(c["passed"] for c in traj.checks) else 1
+    g = traj.grade or {}
+    print(f"reward: {g.get('reward')}  flags: {', '.join(g.get('flags', [])) or 'none'}")
+    print(f"trajectory → {out}")
+    return 0 if g.get("reward") == 1.0 else 1
 
 
 def main(argv: list[str] | None = None) -> int:
