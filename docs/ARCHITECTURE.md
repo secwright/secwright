@@ -207,7 +207,9 @@ One JSON object per episode, appended to `trajectories.jsonl`:
   "tokens": {"prompt": 48210, "completion": 3120},
   "duration_s": 212.4,
   "diff": "--- a/src/jinja2/filters.py …",
-  "grade": {"reward": 1.0, "checks": [ … ], "flags": []}
+  "checks": [{"name": "security", "kind": "security", "passed": true, "exit_code": 0, "timed_out": false, "duration_s": 0.7, "output_tail": "…"}],
+  "grade": {"reward": 1.0, "flags": []},
+  "error": null
 }
 ```
 
