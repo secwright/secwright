@@ -8,6 +8,7 @@ from importlib import resources
 
 from .. import __version__
 from ..grading.checks import copy_hidden, run_checks
+from ..grading.grader import grade
 from ..models.client import Message, ModelClient
 from ..record.trajectory import Trajectory
 from ..sandbox.base import Sandbox
@@ -108,4 +109,6 @@ def run_episode(
     traj.steps = steps
     traj.duration_s = round(time.monotonic() - t0, 2)
     traj.messages = [m.to_record() for m in messages]
+    if run_checks_after:
+        traj.grade = grade(traj.checks, traj.diff, traj.stop_reason, traj.error).to_dict()
     return traj
